@@ -1,7 +1,7 @@
 %--------------------------------------------------------------------------
 % Created: 09/15/2016 by Robert Schurz, Bhargavi
 % 
-% Revision History: None
+% Revision History: 09/22/2016 RS
 % 
 % Purpose: This script reads in images and converts them to grayscale.
 %
@@ -10,7 +10,7 @@
 % A = imread('Iphone5 - pole - 1.jpg');
 % A1 = rgb2gray(A);
 tic
-A = imread('S5-bench-3.jpg');
+A = imread('S5-bench-2.jpg');
 A1 = rgb2gray(A);
 A1 = wiener2(A1,[20 20]);
 %A1 = imcomplement(A1);
