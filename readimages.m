@@ -10,29 +10,40 @@
 %A = imread('Iphone5 - pole - 1.JPG');
 % A1 = rgb2gray(A);
 tic
+A = imread('leftimage_0015.jpg');
+hsv_image = rgb2hsv(A); 
 %A = imread('20161006_151623Hallway.jpg');
 %A = imread('Door2.jpg');
 %A = imread('DisparityDoor1.jpg');
-%A = imread('DisparityDoor2.jpg');
+%A1 = imread('DisparityDoor2.jpg');
 %A = imread('20161006_hallway1.jpg');
+%figure
+%imshow(stereoAnaglyph(A,A1));
 %A = imread('20161006_151530Hallway.jpg');
 %A = imread('20161006_151604Hallway.jpg');
-A = imread('20161006_151750Hallway.jpg');
+%A = imread('20161006_151750Hallway.jpg');
+%hsv_image = rgb2hsv(A);
+%H = squeeze(hsv_image(:,:,1));
+%S=squeeze(hsv_image(:,:,2));
+%V=squeeze(hsv_image(:,:,3));
 %hsv_image = rgb2hsv(A);
 A1 = rgb2gray(A);
 [n,m]=size(A1);
-A1 = wiener2(A1,[10 10]);
+%A1 = wiener2(A1,[5 5]);
+%A1=Hue;
 %A1 = padarray(A1,[2,2],1,'both');
-%A1 = medfilt2(A1, [3 3]);
+A1 = medfilt2(A1, [3 3]);
 %A1 = imgaussfilt(A1);
 BW2 = edge(A1,'canny',(graythresh(A1) * 0.1));
 %BW2 = edge(A1,'canny');
+BW2 = mybwthin(BW2);
+
 %BW2 = padarray(BW2,[2,2],1,'both');
 
 se1 = strel('line',4,180);            % linear horizontal structuring element 
 se2 = strel('line',4,90);             % linear vertical structuring element 
 %I = rgb2gray(imread('20161006_151530Hallway.jpg'))>80;  % threshold (since i had a grayscale version of the image)
-Idil = imdilate(imdilate(BW2,se1),se2); % dilate contours so that they connect
+Idil = imdilate(BW2, [se1 se2]); % dilate contours so that they connect
 %Idil_area = bwareaopen(Idil,2000);    % area filter them to remove the small components
 
 R = 3;
@@ -40,11 +51,11 @@ N = 4;
 SE = strel('disk',R,N);
 Edgelinked1 = imerode(Idil,SE);
 Edgelinked1 = imclose(Idil,SE);
-Idil_area1 = bwareaopen(Edgelinked1,50);
+%Idil_area1 = bwareaopen(Edgelinked1,50);
 
 %Edgelinked1 = padarray(Edgelinked1,[1,1],0,'both');
 %[B,L] = bwboundaries(Idil_area1);
-Test = imfill(Idil_area1,'holes');
+Test = imfill(Edgelinked1,'holes');
 Test2 = imdilate(imerode(Test, SE),SE);
 A1(~Test2)=0;
 toc
